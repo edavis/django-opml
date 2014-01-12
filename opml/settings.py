@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+ENVIRONMENT = os.environ.get('ENVIRONMENT', 'development')
 
 
 # Quick-start development settings - unsuitable for production
@@ -62,9 +63,11 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'opml_rsshub',
-        'HOST': 'localhost',
     }
 }
+
+if ENVIRONMENT == 'development':
+    DATABASES['default']['HOST'] = 'localhost'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
