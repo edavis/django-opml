@@ -56,7 +56,7 @@ def build_head(opml):
     add_element(head, 'ownerName', 'Eric Davis')
     add_element(head, 'ownerEmail', 'eric@davising.com')
     add_element(head, 'ownerId', 'https://twitter.com/ejd791')
-    add_element(head, 'docs', 'http://dev.opml.org/spec2.html') # TODO document the 'riverpy' format
+    add_element(head, 'docs', 'https://github.com/edavis/django-opml')
     return head
 
 
