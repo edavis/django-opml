@@ -84,7 +84,7 @@ def index(request):
     return render_opml(opml)
 
 
-def collection_opml(request, slug):
+def view_collection(request, slug):
     collection = get_object_or_404(Collection, slug=slug)
     opml = etree.Element('opml', version='2.0')
 
@@ -114,7 +114,7 @@ def edit_collection(request, slug):
             feed_obj.collections.add(collection)
             feed_obj.save()
             feed_obj.update_info()
-        redirect_url = reverse('collection_opml', kwargs={'slug': collection.slug})
+        redirect_url = reverse('view_collection', kwargs={'slug': collection.slug})
         return redirect(redirect_url)
     elif request.method == 'GET':
         return render(request, 'feed/edit_collection.html')
