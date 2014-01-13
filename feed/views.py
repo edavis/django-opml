@@ -2,9 +2,10 @@ import calendar
 from email.utils import formatdate
 
 from lxml import etree
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.db.models import Max, Min
+from django.core.urlresolvers import reverse
 
 from feed.models import Collection, Feed
 
@@ -97,3 +98,23 @@ def collection_opml(request, slug):
         add_feed(body, feed)
 
     return render_opml(opml)
+
+
+def edit_collection(request, slug):
+    collection = get_object_or_404(Collection, slug=slug)
+    if request.method == 'POST':
+        feeds = request.POST.get('feeds')
+        if not feeds:
+            url = reverse('edit_collection', kwargs={'slug': collection.slug})
+            return redirect(url)
+        for feed_url in feeds.splitlines():
+            feed_obj = Feed()
+            feed_obj.url = feed_url
+            feed_obj.save()
+            feed_obj.collections.add(collection)
+            feed_obj.save()
+            feed_obj.update_info()
+        redirect_url = reverse('collection_opml', kwargs={'slug': collection.slug})
+        return redirect(redirect_url)
+    elif request.method == 'GET':
+        return render(request, 'feed/edit_collection.html')
