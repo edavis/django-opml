@@ -61,6 +61,8 @@ def build_head(opml):
 
 
 def add_timestamp_headers(qs, head):
+    if not qs.exists():
+        return
     info = qs.aggregate(dateCreated=Min('added'), dateModified=Max('modified'))
     add_element(head, 'dateCreated', format_timestamp(info['dateCreated']))
     add_element(head, 'dateModified', format_timestamp(info['dateModified']))
